@@ -1,24 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header';
+import Menu from './components/Menu'; 
+import Withdraw from './components/Withdraw'; 
+import Login from './components/Login'; 
+import {Routes, Route, useNavigate} from 'react-router-dom';
+import { useSelector} from "react-redux";
+import {useEffect} from "react"
+import Deposit from './components/Deposit';
+
 
 function App() {
+
+  const navigate = useNavigate()
+
+  const user = useSelector(state => state.user.user)
+
+  useEffect(() => {
+
+    if (!user.isLogin){
+      navigate("/login", {replace:true})
+    }
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<Menu /> } />
+          <Route path="/login" element={<Login />}/>
+          <Route path="/balance" element={<>
+          <h1 className="balance">Bakiye: {user.balance}</h1>
+          </>}/>
+          <Route path="/deposit" element={<Deposit />}/>
+          <Route path="/withdraw" element={<Withdraw />}/>
+        </Routes>
+      </main>
+    </>
   );
 }
 
